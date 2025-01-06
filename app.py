@@ -2,19 +2,17 @@ import streamlit as st
 import pandas as pd
 import pycountry
 
-# Generate country_codes dictionary using pycountry
-country_codes = {}
-for country in pycountry.countries:
-    # Check if calling_codes attribute exists 
-    if hasattr(country, 'calling_codes') and country.calling_codes:  
-        country_codes[country.name] = f"+{country.calling_codes[0]}"
-
 # Initialize database as a DataFrame
 if "database" not in st.session_state:
     st.session_state.database = pd.DataFrame(columns=[
         "First Name", "Last Name", "Contact #", "Country of Residence",
         "LinkedIn URL", "Industry", "Position", "Areas of Collaboration"
     ])
+
+# Generate country list and country_codes dictionary using pycountry
+country_list = [country.name for country in pycountry.countries if hasattr(country, 'calling_codes') and country.calling_codes]
+country_codes = {country.name: f"+{country.calling_codes[0]}" for country in pycountry.countries if hasattr(country, 'calling_codes') and country.calling_codes}
+
 
 st.title("Professional Collaboration Platform")
 
@@ -24,7 +22,7 @@ with st.form("user_form"):
     last_name = st.text_input("Last Name", key="last_name")
 
     # Country and Contact # with automation
-    country = st.selectbox("Country of Residence", list(country_codes.keys()), key="country")
+    country = st.selectbox("Country of Residence", country_list, key="country")
     contact = st.text_input("Contact #", value=country_codes.get(country, ""), key="contact")
 
     linkedin = st.text_input("LinkedIn URL", key="linkedin")
@@ -52,7 +50,7 @@ if submitted:
     # Clear input fields using session state
     for key in ["first_name", "last_name", "contact", "linkedin", "industry", "position", "collaboration"]:
         st.session_state[key] = ""
-    st.session_state.country = list(country_codes.keys())[0]  # Reset country to default
+    st.session_state.country = country_list[0]  # Reset country to default
 
 # Display database
 st.header("Database")
