@@ -5,10 +5,9 @@ import pycountry
 # Generate country_codes dictionary using pycountry
 country_codes = {}
 for country in pycountry.countries:
-    try:
+    # Check if calling_codes attribute exists 
+    if hasattr(country, 'calling_codes') and country.calling_codes:  
         country_codes[country.name] = f"+{country.calling_codes[0]}"
-    except (KeyError, IndexError):
-        pass  # Handle countries without calling codes
 
 # Initialize database as a DataFrame
 if "database" not in st.session_state:
