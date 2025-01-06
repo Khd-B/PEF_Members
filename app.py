@@ -1,75 +1,83 @@
 import streamlit as st
 import pandas as pd
 import pycountry
+import phonenumbers
 
-# Initialize database as a DataFrame
+# App title
+st.title("Pakistani Executive Forum")
+
+# Initialize the database in session state (hidden in background)
 if "database" not in st.session_state:
     st.session_state.database = pd.DataFrame(columns=[
-        "First Name", "Last Name", "Contact #", "Country of Residence",
-        "LinkedIn URL", "Industry", "Position", "Areas of Collaboration"
+        "Serial No.", "First Name", "Last Name", "Contact #", "Country of Residence", 
+        "LinkedIn URL", "Sector / Industry", "Position", "Areas of Collaboration"
     ])
-
-# Generate country list and country_codes dictionary using pycountry
-country_list = [country.name for country in pycountry.countries if hasattr(country, 'calling_codes') and country.calling_codes]
-country_codes = {country.name: f"+{country.calling_codes[0]}" for country in pycountry.countries if hasattr(country, 'calling_codes') and country.calling_codes}
-
-
-st.title("Professional Collaboration Platform")
 
 # Input Form
 with st.form("user_form"):
-    first_name = st.text_input("First Name", key="first_name")
-    last_name = st.text_input("Last Name", key="last_name")
+    first_name = st.text_input("First Name")
+    last_name = st.text_input("Last Name")
 
-    # Country and Contact # with automation
-    country = st.selectbox("Country of Residence", country_list, key="country")
-    contact = st.text_input("Contact #", value=country_codes.get(country, ""), key="contact")
-
-    linkedin = st.text_input("LinkedIn URL", key="linkedin")
-    industry = st.text_input("Industry", key="industry")
-    position = st.text_input("Position", key="position")
-    collaboration = st.text_area("Areas of Collaboration", key="collaboration")
+    # Country dropdown
+    countries = [country.name for country in pycountry.countries]
+    country = st.selectbox("Country of Residence", options=["Select a country"] + countries)
+    
+    # Auto-populate contact number country code using phonenumbers library
+    contact = ""
+    country_code = ""
+    if country and country != "Select a country":
+        try:
+            # Get the country alpha_2 code from pycountry for the selected country
+            country_obj = pycountry.countries.get(name=country)
+            country_alpha_2 = country_obj.alpha_2
+            
+            # Use phonenumbers to fetch the country code for the country
+            country_code = phonenumbers.country_code_for_region(country_alpha_2)
+            contact = st.text_input(f"Contact # (+{country_code})")
+        except Exception as e:
+            st.error(f"Error: {e}")
+            contact = st.text_input("Contact #")
+    else:
+        contact = st.text_input("Contact #")
+        
+    linkedin = st.text_input("LinkedIn URL")
+    industry = st.text_input("Industry")
+    position = st.text_input("Position")
+    collaboration = st.text_area("Areas of Collaboration")
     submitted = st.form_submit_button("Submit")
 
-# Handle Form Submission
+# Handle form submission
 if submitted:
-    # Add data to the session's database
-    new_entry = {
-        "First Name": first_name,
-        "Last Name": last_name,
-        "Contact #": contact,
-        "Country of Residence": country,
-        "LinkedIn URL": linkedin,
-        "Industry": industry,
-        "Position": position,
-        "Areas of Collaboration": collaboration,
-    }
-    st.session_state.database = pd.concat([st.session_state.database, pd.DataFrame([new_entry])], ignore_index=True)
-    st.success("Your data has been added successfully!")
-
-    # Clear input fields using session state
-    for key in ["first_name", "last_name", "contact", "linkedin", "industry", "position", "collaboration"]:
-        st.session_state[key] = ""
-    st.session_state.country = country_list[0]  # Reset country to default
-
-# Display database
-st.header("Database")
-st.dataframe(st.session_state.database)
-
-# Save data to CSV
-if st.button("Save Database"):
-    st.session_state.database.to_csv("database.csv", index=False)
-    st.success("Database saved to database.csv!")
-
-# Search functionality
-st.header("Search Database")
-search_term = st.text_input("Search by Name, Industry, or Collaboration Area")
-
-if search_term:
-    results = st.session_state.database[
-        st.session_state.database.apply(lambda row: search_term.lower() in row.astype(str).str.lower().to_string(), axis=1)
+    # Check if the data already exists to avoid duplication
+    existing_data = st.session_state.database[
+        (st.session_state.database["First Name"] == first_name) &
+        (st.session_state.database["Last Name"] == last_name) &
+        (st.session_state.database["Contact #"] == contact)
     ]
-    if not results.empty:
-        st.dataframe(results)
+    
+    if not existing_data.empty:
+        st.warning("This entry already exists in the database!")
     else:
-        st.warning("No results found.")
+        # Generate serial number for the new entry (starting from 1)
+        new_entry = pd.DataFrame([{
+            "Serial No.": len(st.session_state.database) + 1,  # Serial starts from 1
+            "First Name": first_name,
+            "Last Name": last_name,
+            "Contact #": contact,
+            "Country of Residence": country,
+            "LinkedIn URL": linkedin,
+            "Industry": industry,
+            "Position": position,
+            "Areas of Collaboration": collaboration,
+        }])
+        
+        # Update the database in the background (hidden)
+        st.session_state.database = pd.concat([st.session_state.database, new_entry], ignore_index=True)
+        st.success("Your data has been added successfully!")
+
+        # Clear input fields after submission
+        st.experimental_rerun()  # Forces a re-run, clearing input fields
+
+# Footer
+st.markdown("---")
+st.markdown("<center>A tool to facilitate interaction among PEF members by Khalid Baig</center>", unsafe_allow_html=True)
