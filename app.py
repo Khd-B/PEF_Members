@@ -22,13 +22,17 @@ with st.form("user_form"):
     countries = [country.name for country in pycountry.countries]
     country = st.selectbox("Country of Residence", options=["Select a country"] + countries)
     
-    # Auto-populate contact number country code
+    # Auto-populate contact number country code using phonenumbers library
     contact = ""
     if country and country != "Select a country":
-        # Get the country alpha_2 code to get the phone number code
-        country_alpha_2 = pycountry.countries.get(name=country).alpha_2
-        phone_code = phonenumbers.country_code_for_region(country_alpha_2)
-        contact = st.text_input(f"Contact # (+{phone_code})")
+        try:
+            # Get the country code from phonenumbers based on the country name
+            country_obj = pycountry.countries.get(name=country)
+            country_code = phonenumbers.country_code_for_region(country_obj.alpha_2)
+            contact = st.text_input(f"Contact # (+{country_code})")
+        except Exception as e:
+            contact = st.text_input("Contact #")
+            st.error("Unable to fetch country code")
     else:
         contact = st.text_input("Contact #")
         
