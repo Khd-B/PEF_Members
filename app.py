@@ -3,9 +3,8 @@ import pandas as pd
 import pycountry
 import phonenumbers
 
-# Add logo
-st.image("logo.png", width=200)  # Replace with your logo filename or URL
-st.title("Pakistan Executive Forum")
+# App title
+st.title("Pakistani Executive Forum")
 
 # Initialize the database
 if "database" not in st.session_state:
