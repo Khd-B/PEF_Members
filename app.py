@@ -62,6 +62,8 @@ with st.form("user_form"):
     st.session_state.industry = st.text_input("Industry", value=st.session_state.industry)
     st.session_state.position = st.text_input("Position", value=st.session_state.position)
     st.session_state.collaboration = st.text_area("Areas of Collaboration", value=st.session_state.collaboration)
+    
+    # Submit button to submit the form data
     submitted = st.form_submit_button("Submit")
 
 # Handle form submission
