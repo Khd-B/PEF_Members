@@ -25,10 +25,10 @@ with st.form("user_form"):
     # Auto-populate contact number country code
     contact = ""
     if country and country != "Select a country":
-        # Get the country code using pycountry and phonenumbers
-        country_obj = pycountry.countries.get(name=country)
-        country_code = phonenumbers.region_code_for_number(phonenumbers.parse('+' + country_obj.alpha_2))
-        contact = st.text_input(f"Contact # (+{country_code})")
+        # Get the country alpha_2 code to get the phone number code
+        country_alpha_2 = pycountry.countries.get(name=country).alpha_2
+        phone_code = phonenumbers.country_code_for_region(country_alpha_2)
+        contact = st.text_input(f"Contact # (+{phone_code})")
     else:
         contact = st.text_input("Contact #")
         
