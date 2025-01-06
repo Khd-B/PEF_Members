@@ -9,7 +9,7 @@ st.title("Pakistani Executive Forum")
 # Initialize the database in session state (hidden in background)
 if "database" not in st.session_state:
     st.session_state.database = pd.DataFrame(columns=[
-        "First Name", "Last Name", "Contact #", "Country of Residence", 
+        "Serial No.", "First Name", "Last Name", "Contact #", "Country of Residence", 
         "LinkedIn URL", "Sector / Industry", "Position", "Areas of Collaboration"
     ])
 
@@ -23,6 +23,7 @@ with st.form("user_form"):
     country = st.selectbox("Country of Residence", options=["Select a country"] + countries)
     
     # Auto-populate contact number country code
+    contact = ""
     if country and country != "Select a country":
         country_code = pycountry.countries.get(name=country).alpha_2
         contact_code = phonenumbers.COUNTRY_CODE_TO_REGION_CODE.get(country_code, "")
@@ -38,28 +39,35 @@ with st.form("user_form"):
 
 # Handle form submission
 if submitted:
-    # Update the database in the background (hidden)
-    new_entry = pd.DataFrame([{
-        "First Name": first_name,
-        "Last Name": last_name,
-        "Contact #": contact,
-        "Country of Residence": country,
-        "LinkedIn URL": linkedin,
-        "Industry": industry,
-        "Position": position,
-        "Areas of Collaboration": collaboration,
-    }])
+    # Check if the data already exists to avoid duplication
+    existing_data = st.session_state.database[
+        (st.session_state.database["First Name"] == first_name) &
+        (st.session_state.database["Last Name"] == last_name) &
+        (st.session_state.database["Contact #"] == contact)
+    ]
     
-    st.session_state.database = pd.concat([st.session_state.database, new_entry], ignore_index=True)
-    st.success("Your data has been added successfully!")
-    
-    # Clear input fields after submission
-    st.experimental_rerun()  # This forces a re-run of the app, clearing the input fields
+    if not existing_data.empty:
+        st.warning("This entry already exists in the database!")
+    else:
+        # Generate serial number for the new entry (starting from 1)
+        new_entry = pd.DataFrame([{
+            "Serial No.": len(st.session_state.database) + 1,  # Serial starts from 1
+            "First Name": first_name,
+            "Last Name": last_name,
+            "Contact #": contact,
+            "Country of Residence": country,
+            "LinkedIn URL": linkedin,
+            "Industry": industry,
+            "Position": position,
+            "Areas of Collaboration": collaboration,
+        }])
+        
+        # Update the database in the background (hidden)
+        st.session_state.database = pd.concat([st.session_state.database, new_entry], ignore_index=True)
+        st.success("Your data has been added successfully!")
 
-# Save button (optional, for download or backup)
-if st.button("Save Database"):
-    st.session_state.database.to_csv("database.csv", index=False)
-    st.success("Database saved to database.csv!")
+        # Clear input fields after submission
+        st.experimental_rerun()  # Forces a re-run, clearing input fields
 
 # Footer
 st.markdown("---")
