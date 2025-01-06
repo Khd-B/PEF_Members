@@ -75,8 +75,8 @@ if submitted:
         st.session_state.database = pd.concat([st.session_state.database, new_entry], ignore_index=True)
         st.success("Your data has been added successfully!")
 
-        # Clear input fields after submission
-        st.experimental_rerun()  # Forces a re-run, clearing input fields
+        # Manually clear input fields by using st.empty()
+        st.empty()  # This should clear the form and reset the fields
 
 # Footer
 st.markdown("---")
