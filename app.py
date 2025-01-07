@@ -30,19 +30,15 @@ create_database()
 background_image_url = 'https://raw.githubusercontent.com/Khd-B/PEF_Members/refs/heads/main/PEF%20Logo.jpg'
 
 st.markdown("""
-<style>
-.bg-container {
-    background-image: url('https://raw.githubusercontent.com/Khd-B/PEF_Members/refs/heads/main/PEF%20Logo.jpg');
-   background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    position: behind;
-    width: 100%;
-}
-</style>
-<div class="bg-container"></div>
-""", unsafe_allow_html=True)
+    <style>
+    .stApp {
+        background-image: url('https://raw.githubusercontent.com/Khd-B/PEF_Members/main/PEF_Logo.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 
 # App title
