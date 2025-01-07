@@ -41,23 +41,24 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# App title
-st.title("Professional Network App")
-
-# Input form
-first_name = st.text_input("First Name")
-last_name = st.text_input("Last Name")
-country_residence = st.selectbox(
-    "Country of Residence",
-    ["Select a country"] + [country.name for country in pycountry.countries]
-)
-contact_number = st.text_input("Contact #")
-linkedin_url = st.text_input("LinkedIn URL (Optional)")
-you_are = st.multiselect(
-    "You are",
-    ["Consultant", "Entrepreneur", "Executive", "Freelancer"]
-)
-areas_collaboration = st.text_input("Areas of Potential Collaboration")
+# Container for UI elements
+container = st.container()
+with container:
+    # Input form
+    st.title("Professional Network App")
+    first_name = st.text_input("First Name")
+    last_name = st.text_input("Last Name")
+    country_residence = st.selectbox(
+        "Country of Residence",
+        ["Select a country"] + [country.name for country in pycountry.countries]
+    )
+    contact_number = st.text_input("Contact #")
+    linkedin_url = st.text_input("LinkedIn URL (Optional)")
+    you_are = st.multiselect(
+        "You are",
+        ["Consultant", "Entrepreneur", "Executive", "Freelancer"]
+    )
+    areas_collaboration = st.text_input("Areas of Potential Collaboration")
 
 # Function to check if contact number already exists in the database
 def check_contact_number_exists(contact_number):
