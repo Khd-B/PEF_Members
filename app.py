@@ -34,11 +34,9 @@ st.markdown("""
 .bg-container {
     background-image: url('https://raw.githubusercontent.com/Khd-B/PEF_Members/refs/heads/main/PEF%20Logo.jpg');
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
-    position: relative;
-    width: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
 }
 </style>
 <div class="bg-container"></div>
