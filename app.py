@@ -85,6 +85,7 @@ with st.form("input_form"):
             
 st.header("Search Members")
 search_term = st.text_input("Search by name, role, or collaboration area")
+
 if st.button("Search"):
     conn = sqlite3.connect(DB_FILE)
     cursor = conn.cursor()
@@ -94,19 +95,19 @@ if st.button("Search"):
     """, (f"%{search_term}%", f"%{search_term}%", f"%{search_term}%", f"%{search_term}%"))
     results = cursor.fetchall()
     conn.close()
-    
-            if results:
-                for row in results:
-                    st.write(f"ID: {row[0]}")
-                    st.write(f"Name: {row[1]} {row[2]}")
-                    st.write(f"Contact: {row[3]}")
-                    st.write(f"Country: {row[4]}")
-                    st.write(f"LinkedIn: {row[5] if row[5] else 'N/A'}")
-                    st.write(f"You are: {row[6]}")
-                    st.write(f"Collaboration: {row[7]}")
-                st.markdown("---")
-        else:
-            st.warning("No matching members found.")
+
+    if results:
+        for row in results:
+            st.write(f"ID: {row[0]}")
+            st.write(f"Name: {row[1]} {row[2]}")
+            st.write(f"Contact: {row[3]}")
+            st.write(f"Country: {row[4]}")
+            st.write(f"LinkedIn: {row[5] if row[5] else 'N/A'}")
+            st.write(f"You are: {row[6]}")
+            st.write(f"Collaboration: {row[7]}")
+            st.markdown("---")
+    else:
+        st.warning("No matching members found.")
 
 if st.button("View All Members"):
     conn = sqlite3.connect(DB_FILE)
@@ -114,19 +115,19 @@ if st.button("View All Members"):
     cursor.execute("SELECT * FROM professionals")
     results = cursor.fetchall()
     conn.close()
-    
-           if results:
-                for row in results:
-                    st.write(f"ID: {row[0]}")
-                    st.write(f"Name: {row[1]} {row[2]}")
-                    st.write(f"Contact: {row[3]}")
-                    st.write(f"Country: {row[4]}")
-                    st.write(f"LinkedIn: {row[5] if row[5] else 'N/A'}")
-                    st.write(f"You are: {row[6]}")
-                    st.write(f"Collaboration: {row[7]}")
-                    st.markdown("---")
-else:
-    st.info("The database is empty.")
+
+    if results:
+        for row in results:
+            st.write(f"ID: {row[0]}")
+            st.write(f"Name: {row[1]} {row[2]}")
+            st.write(f"Contact: {row[3]}")
+            st.write(f"Country: {row[4]}")
+            st.write(f"LinkedIn: {row[5] if row[5] else 'N/A'}")
+            st.write(f"You are: {row[6]}")
+            st.write(f"Collaboration: {row[7]}")
+            st.markdown("---")
+    else:
+        st.info("The database is empty.")
 
 st.markdown("---")
 st.markdown("<center>Professional Network App by Khalid Baig</center>", unsafe_allow_html=True)
