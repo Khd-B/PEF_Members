@@ -28,7 +28,12 @@ def get_country_dial_code(country_name):
     countries = pycountry.countries
     for country in countries:
         if country.name == country_name:
-            return '+' + country.calling_codes[0]
+            return '+' + str(country.phone)
+
+
+# Usage
+country_residence = st.selectbox("Country of Residence", [country.name for country in pycountry.countries])
+contact_number = st.text_input("Contact #", value=get_country_dial_code(country_residence))
 
 def validate_contact_number(contact_number):
     pattern = re.compile(r'^\+\d{1,3}\d{9,12}$')
