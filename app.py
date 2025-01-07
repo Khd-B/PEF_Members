@@ -26,23 +26,21 @@ def create_database():
 
 create_database()
 
-# Set background with logo
-import streamlit as st
+# Set background with an image from GitHub
+background_image_url = "https://raw.githubusercontent.com/Khd-B/PEF_Members/refs/heads/main/PEF%20Logo.jpg"
 
-# Set background with an image from Unsplash
 st.markdown(
-    """
+    f"""
     <style>
-        .reportview-container {
-            background: url('https://images.unsplash.com/photo-1574181397056-207efc36d6d9') no-repeat center center fixed;
+        .reportview-container {{
+            background: url('{background_image_url}') no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
-        }
+        }}
     </style>
     """, 
     unsafe_allow_html=True
 )
-
 
 # App title
 st.title("Professional Network App")
