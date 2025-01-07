@@ -95,18 +95,18 @@ if st.button("Search"):
     results = cursor.fetchall()
     conn.close()
     
-    if results:
-        for row in results:
-            st.write(f"ID: {row[0]}")
-            st.write(f"Name: {row[1]} {row[2]}")
-            st.write(f"Contact: {row[3]}")
-            st.write(f"Country: {row[4]}")
-            st.write(f"LinkedIn: {row[5] if row[5] else 'N/A'}")
-            st.write(f"You are: {row[6]}")
-            st.write(f"Collaboration: {row[7]}")
-            st.markdown("---")
-    else:
-        st.warning("No matching members found.")
+        if results:
+            for row in results:
+                st.write(f"ID: {row[0]}")
+                st.write(f"Name: {row[1]} {row[2]}")
+                st.write(f"Contact: {row[3]}")
+                st.write(f"Country: {row[4]}")
+                st.write(f"LinkedIn: {row[5] if row[5] else 'N/A'}")
+                st.write(f"You are: {row[6]}")
+                st.write(f"Collaboration: {row[7]}")
+                st.markdown("---")
+        else:
+            st.warning("No matching members found.")
 
 if st.button("View All Members"):
     conn = sqlite3.connect(DB_FILE)
@@ -115,16 +115,16 @@ if st.button("View All Members"):
     results = cursor.fetchall()
     conn.close()
     
-   if results:
-    for row in results:
-        st.write(f"ID: {row[0]}")
-        st.write(f"Name: {row[1]} {row[2]}")
-        st.write(f"Contact: {row[3]}")
-        st.write(f"Country: {row[4]}")
-        st.write(f"LinkedIn: {row[5] if row[5] else 'N/A'}")
-        st.write(f"You are: {row[6]}")
-        st.write(f"Collaboration: {row[7]}")
-        st.markdown("---")
+           if results:
+                for row in results:
+                    st.write(f"ID: {row[0]}")
+                    st.write(f"Name: {row[1]} {row[2]}")
+                    st.write(f"Contact: {row[3]}")
+                    st.write(f"Country: {row[4]}")
+                    st.write(f"LinkedIn: {row[5] if row[5] else 'N/A'}")
+                    st.write(f"You are: {row[6]}")
+                    st.write(f"Collaboration: {row[7]}")
+                    st.markdown("---")
 else:
     st.info("The database is empty.")
 
