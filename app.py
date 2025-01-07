@@ -104,7 +104,7 @@ if st.button("View Database"):
 st.markdown(r"""
 <style>
 .reportview-container {
-    background: url("https://github.com/Khd-B/PEF_Members/blob/main/PEF%20Logo.jpg") no-repeat center fixed;
+    background: url("https://raw.githubusercontent.com/Khd-B/PEF_Members/refs/heads/main/PEF_Logo.jpg") no-repeat center fixed;
     background-size: cover;
 }
 </style>
