@@ -46,19 +46,20 @@ st.markdown(f"""
 # Container for UI elements
 container = st.container()
 with container:
+# Input form
    st.title("Professional Network App")
 
-first_name = st.text_input("First Name", key="first_name")
-last_name = st.text_input("Last Name", key="last_name")
+first_name = st.text_input("First Name", key="first_name_unique")
+last_name = st.text_input("Last Name", key="last_name_unique")
 
-country_residence = st.selectbox("Country of Residence", ["Select a country"] + [country.name for country in pycountry.countries], key="country")
+country_residence = st.selectbox("Country of Residence", ["Select a country"] + [country.name for country in pycountry.countries], key="country_unique")
 
-contact_number = st.text_input("Contact Number", key="contact_number")
-linkedin_url = st.text_input("LinkedIn URL (Optional)", key="linkedin_url")
+contact_number = st.text_input("Contact Number", key="contact_number_unique")
+linkedin_url = st.text_input("LinkedIn URL (Optional)", key="linkedin_url_unique")
 
-you_are = st.multiselect("You are", ["Consultant", "Entrepreneur", "Executive", "Freelancer"], key="you_are")
+you_are = st.multiselect("You are", ["Consultant", "Entrepreneur", "Executive", "Freelancer"], key="you_are_unique")
 
-areas_collaboration = st.text_input("Areas of Potential Collaboration", key="collaboration")
+areas_collaboration = st.text_input("Areas of Potential Collaboration", key="collaboration_unique")
 
 # User input titles with custom styling
 first_name_title = st.markdown("<p class='title'>First Name</p>", unsafe_allow_html=True)
