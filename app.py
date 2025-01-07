@@ -23,7 +23,6 @@ cursor.execute("""
 
 conn.commit()
 
-
 def get_country_dial_code(country_name):
     countries = pycountry.countries
     for country in countries:
