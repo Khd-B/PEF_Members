@@ -31,8 +31,8 @@ st.markdown(
     """
     <style>
         .reportview-container {
-            background: url("https://images.unsplash.com/photo-1574181397056-207efc36d6d9
-") no-repeat center center fixed;
+            background: url(https://images.unsplash.com/photo-1574181397056-207efc36d6d9
+) no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
         }
