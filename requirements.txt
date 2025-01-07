@@ -1,5 +1,6 @@
 streamlit
+sqlite3
+re
 pandas
-pyngrok
 pycountry
 phonenumbers
