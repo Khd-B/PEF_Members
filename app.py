@@ -49,27 +49,30 @@ with container:
     # Input form
     st.title("Professional Network App")
     
-    # User input titles with custom styling
-    first_name_title = st.markdown("<p class='title'>First Name</p>", unsafe_allow_html=True)
-    first_name = st.text_input("")
-    
-    last_name_title = st.markdown("<p class='title'>Last Name</p>", unsafe_allow_html=True)
-    last_name = st.text_input("")
-    
-    country_residence_title = st.markdown("<p class='title'>Country of Residence</p>", unsafe_allow_html=True)
-    country_residence = st.selectbox("", ["Select a country"] + [country.name for country in pycountry.countries])
-    
-    contact_number_title = st.markdown("<p class='title'>Contact #</p>", unsafe_allow_html=True)
-    contact_number = st.text_input("")
-    
-    linkedin_url_title = st.markdown("<p class='title'>LinkedIn URL (Optional)</p>", unsafe_allow_html=True)
-    linkedin_url = st.text_input("")
-    
-    you_are_title = st.markdown("<p class='title'>You are</p>", unsafe_allow_html=True)
-    you_are = st.multiselect("", ["Consultant", "Entrepreneur", "Executive", "Freelancer"])
-    
-    areas_collaboration_title = st.markdown("<p class='title'>Areas of Potential Collaboration</p>", unsafe_allow_html=True)
-    areas_collaboration = st.text_input("")
+    # Input form
+st.title("Professional Network App")
+
+# User input titles with custom styling
+first_name_title = st.markdown("<p class='title'>First Name</p>", unsafe_allow_html=True)
+first_name = st.text_input("First Name", key="first_name")
+
+last_name_title = st.markdown("<p class='title'>Last Name</p>", unsafe_allow_html=True)
+last_name = st.text_input("Last Name", key="last_name")
+
+country_residence_title = st.markdown("<p class='title'>Country of Residence</p>", unsafe_allow_html=True)
+country_residence = st.selectbox("Country", ["Select a country"] + [country.name for country in pycountry.countries], key="country")
+
+contact_number_title = st.markdown("<p class='title'>Contact #</p>", unsafe_allow_html=True)
+contact_number = st.text_input("Contact Number", key="contact_number")
+
+linkedin_url_title = st.markdown("<p class='title'>LinkedIn URL (Optional)</p>", unsafe_allow_html=True)
+linkedin_url = st.text_input("LinkedIn URL", key="linkedin_url")
+
+you_are_title = st.markdown("<p class='title'>You are</p>", unsafe_allow_html=True)
+you_are = st.multiselect("Roles", ["Consultant", "Entrepreneur", "Executive", "Freelancer"], key="you_are")
+
+areas_collaboration_title = st.markdown("<p class='title'>Areas of Potential Collaboration</p>", unsafe_allow_html=True)
+areas_collaboration = st.text_input("Collaboration Areas", key="collaboration")
 
     # Function to check if contact number already exists in the database
     def check_contact_number_exists(contact_number):
