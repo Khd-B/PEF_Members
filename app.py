@@ -27,11 +27,14 @@ def create_database():
 create_database()
 
 # Set background with logo
+import streamlit as st
+
+# Set background with an image from Unsplash
 st.markdown(
     """
     <style>
         .reportview-container {
-            background: url('https://raw.githubusercontent.com/Khd-B/PEF_Members/main/PEF%20Logo.jpg') no-repeat center center fixed;
+            background: url('https://images.unsplash.com/photo-1574181397056-207efc36d6d9') no-repeat center center fixed;
             background-size: cover;
             height: 100vh;
         }
@@ -39,6 +42,7 @@ st.markdown(
     """, 
     unsafe_allow_html=True
 )
+
 
 # App title
 st.title("Professional Network App")
