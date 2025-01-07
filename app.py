@@ -27,7 +27,7 @@ def create_database():
 create_database()
 
 # Set background with an image from GitHub
-background_image_url = https://raw.githubusercontent.com/Khd-B/PEF_Members/refs/heads/main/PEF%20Logo.jpg
+background_image_url = 'https://raw.githubusercontent.com/Khd-B/PEF_Members/refs/heads/main/PEF%20Logo.jpg'
 
 st.markdown(
     f"""
