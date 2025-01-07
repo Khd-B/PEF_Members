@@ -32,14 +32,11 @@ background_image_url = 'https://raw.githubusercontent.com/Khd-B/PEF_Members/refs
 st.markdown("""
     <style>
     .stApp {
-        background-image: url('https://raw.githubusercontent.com/Khd-B/PEF_Members/main/PEF_Logo.jpg');
+        background: url('https://raw.githubusercontent.com/Khd-B/PEF_Members/main/PEF_Logo.jpg') no-repeat center center fixed;
         background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
     }
     </style>
     """, unsafe_allow_html=True)
-
 
 # App title
 st.title("Professional Network App")
