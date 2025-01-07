@@ -1,110 +1,102 @@
 import streamlit as st
-import pandas as pd
+import sqlite3
+import re
 import pycountry
-import phonenumbers
 
-# App title
-st.title("Pakistani Executive Forum")
+# Create database connection
+conn = sqlite3.connect("professionals.db")
+cursor = conn.cursor()
 
-# Initialize the database in session state (hidden in background)
-if "database" not in st.session_state:
-    st.session_state.database = pd.DataFrame(columns=[
-        "Serial No.", "First Name", "Last Name", "Contact #", "Country of Residence", 
-        "LinkedIn URL", "Sector / Industry", "Position", "Areas of Collaboration"
-    ])
+# Create table
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS professionals (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        first_name TEXT,
+        last_name TEXT,
+        contact_number TEXT,
+        country_residence TEXT,
+        linkedin_url TEXT,
+        industry TEXT,
+        position TEXT,
+        areas_collaboration TEXT
+    );
+""")
 
-# Initialize form input fields in session state if not already present
-if "first_name" not in st.session_state:
-    st.session_state.first_name = ""
-if "last_name" not in st.session_state:
-    st.session_state.last_name = ""
-if "contact" not in st.session_state:
-    st.session_state.contact = ""
-if "country" not in st.session_state:
-    st.session_state.country = ""
-if "linkedin" not in st.session_state:
-    st.session_state.linkedin = ""
-if "industry" not in st.session_state:
-    st.session_state.industry = ""
-if "position" not in st.session_state:
-    st.session_state.position = ""
-if "collaboration" not in st.session_state:
-    st.session_state.collaboration = ""
+conn.commit()
 
-# Input Form
-with st.form("user_form"):
-    st.session_state.first_name = st.text_input("First Name", value=st.session_state.first_name)
-    st.session_state.last_name = st.text_input("Last Name", value=st.session_state.last_name)
 
-    # Country dropdown
-    countries = [country.name for country in pycountry.countries]
-    st.session_state.country = st.selectbox("Country of Residence", options=["Select a country"] + countries, index=countries.index(st.session_state.country) if st.session_state.country else 0)
-    
-    # Auto-populate contact number country code using phonenumbers library
-    contact = ""
-    country_code = ""
-    if st.session_state.country and st.session_state.country != "Select a country":
-        try:
-            # Get the country alpha_2 code from pycountry for the selected country
-            country_obj = pycountry.countries.get(name=st.session_state.country)
-            country_alpha_2 = country_obj.alpha_2
-            
-            # Use phonenumbers to fetch the country code for the country
-            country_code = phonenumbers.country_code_for_region(country_alpha_2)
-            st.session_state.contact = st.text_input(f"Contact # (+{country_code})", value=st.session_state.contact)
-        except Exception as e:
-            st.error(f"Error: {e}")
-            st.session_state.contact = st.text_input("Contact #", value=st.session_state.contact)
-    else:
-        st.session_state.contact = st.text_input("Contact #", value=st.session_state.contact)
+def get_country_code(country_name):
+    countries = pycountry.countries
+    for country in countries:
+        if country.name == country_name:
+            return country.alpha_2
+    return None
+
+
+def validate_contact_number(contact_number):
+    pattern = re.compile(r'^\+\d{1,3}\d{9,12}$')
+    return bool(pattern.match(contact_number))
+
+
+def validate_linkedin_url(linkedin_url):
+    pattern = re.compile(r'^https://www\.linkedin\.com/in/[\w-]+$')
+    return bool(pattern.match(linkedin_url))
+
+
+st.title("Professional Network App")
+
+
+countries = [country.name for country in pycountry.countries]
+country_residence = st.selectbox("Country of Residence", countries)
+
+
+first_name = st.text_input("First Name")
+last_name = st.text_input("Last Name")
+contact_number = st.text_input("Contact #", value="+" + get_country_code(country_residence))
+linkedin_url = st.text_input("LinkedIn URL")
+industry = st.multiselect("Industry", ["Consultant", "Businessman", "Executive", "Freelancer"])
+position = st.text_input("Position")
+areas_collaboration = st.text_input("Areas of Potential Collaboration")
+
+
+def enable_submit_button():
+    return (first_name and last_name and country_residence and validate_contact_number(contact_number) 
+            and validate_linkedin_url(linkedin_url) and industry and position and areas_collaboration)
+
+
+submit_button = st.button("Submit", disabled=not enable_submit_button())
+
+
+if submit_button:
+    confirmation = st.confirm_dialog("Confirm", "Are you sure you want to submit?")
+    if confirmation:
+        cursor.execute("""
+            INSERT OR IGNORE INTO professionals (first_name, last_name, contact_number, country_residence, linkedin_url, industry, position, areas_collaboration)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+        """, (first_name, last_name, contact_number, country_residence, linkedin_url, ', '.join(industry), position, areas_collaboration))
         
-    st.session_state.linkedin = st.text_input("LinkedIn URL", value=st.session_state.linkedin)
-    st.session_state.industry = st.text_input("Industry", value=st.session_state.industry)
-    st.session_state.position = st.text_input("Position", value=st.session_state.position)
-    st.session_state.collaboration = st.text_area("Areas of Collaboration", value=st.session_state.collaboration)
-    
-    # Submit button to submit the form data
-    submitted = st.form_submit_button("Submit")
-
-# Handle form submission
-if submitted:
-    # Check if the data already exists to avoid duplication
-    existing_data = st.session_state.database[
-        (st.session_state.database["First Name"] == st.session_state.first_name) &
-        (st.session_state.database["Last Name"] == st.session_state.last_name) &
-        (st.session_state.database["Contact #"] == st.session_state.contact)
-    ]
-    
-    if not existing_data.empty:
-        st.warning("This entry already exists in the database!")
-    else:
-        # Generate serial number for the new entry (starting from 1)
-        new_entry = pd.DataFrame([{
-            "Serial No.": len(st.session_state.database) + 1,  # Serial starts from 1
-            "First Name": st.session_state.first_name,
-            "Last Name": st.session_state.last_name,
-            "Contact #": st.session_state.contact,
-            "Country of Residence": st.session_state.country,
-            "LinkedIn URL": st.session_state.linkedin,
-            "Industry": st.session_state.industry,
-            "Position": st.session_state.position,
-            "Areas of Collaboration": st.session_state.collaboration,
-        }])
+        conn.commit()
+        conn.close()
         
-        # Update the database in the background (hidden)
-        st.session_state.database = pd.concat([st.session_state.database, new_entry], ignore_index=True)
-        st.success("Your data has been added successfully!")
+        # Clear input fields
+        first_name = st.text_input("First Name", value="")
+        last_name = st.text_input("Last Name", value="")
+        contact_number = st.text_input("Contact #", value="")
+        linkedin_url = st.text_input("LinkedIn URL", value="")
+        position = st.text_input("Position", value="")
+        areas_collaboration = st.text_input("Areas of Potential Collaboration", value="")
 
-        # Reset form fields by clearing session state values
-        st.session_state.first_name = ""
-        st.session_state.last_name = ""
-        st.session_state.contact = ""
-        st.session_state.country = ""
-        st.session_state.linkedin = ""
-        st.session_state.industry = ""
-        st.session_state.position = ""
-        st.session_state.collaboration = ""
 
-# Footer
-st.markdown("---")
-st.markdown("<center>A tool to facilitate interaction among PEF members by Khalid Baig</center>", unsafe_allow_html=True)
+search_term = st.text_input("Search for members")
+if st.button("Search"):
+    cursor.execute("SELECT * FROM professionals WHERE first_name LIKE ? OR last_name LIKE ? OR industry LIKE ?", ('%' + search_term + '%', '%' + search_term + '%', '%' + search_term + '%'))
+    results = cursor.fetchall()
+    for row in results:
+        st.write(row)
+
+
+if st.button("View Database"):
+    cursor.execute("SELECT * FROM professionals")
+    results = cursor.fetchall()
+    for row in results:
+        st.write(row)
