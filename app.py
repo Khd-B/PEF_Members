@@ -26,6 +26,21 @@ def create_database():
 
 create_database()
 
+# Set background with logo
+st.markdown(
+    """
+    <style>
+        .reportview-container {
+            background: url("https://images.unsplash.com/photo-1574181397056-207efc36d6d9
+") no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+        }
+    </style>
+    """, 
+    unsafe_allow_html=True
+)
+
 # App title
 st.title("Professional Network App")
 
