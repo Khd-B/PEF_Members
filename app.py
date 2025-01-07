@@ -3,6 +3,15 @@ import sqlite3
 import pycountry
 import phonenumbers
 import re
+import os  # Add this at the top of the file
+
+# Option to reset the database
+if st.button("Reset Database"):
+    if os.path.exists("professionals.db"):
+        os.remove("professionals.db")
+        st.success("Database reset successfully! Please restart the app.")
+    else:
+        st.info("Database file does not exist. A new one will be created automatically.")
 
 # Create or connect to the database
 conn = sqlite3.connect("professionals.db")
