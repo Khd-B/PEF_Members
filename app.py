@@ -59,12 +59,12 @@ def enable_submit_button():
 
 
 if st.button("Submit", disabled=not enable_submit_button()):
-    confirmation = st.confirm_dialog("Confirm", "Are you sure you want to submit?")
-    if confirmation:
+    confirmation_text = "Are you sure?"
+    if st.button("Confirm"):
         cursor.execute("""
-            INSERT OR IGNORE INTO professionals (first_name, last_name, contact_number, country_residence, linkedin_url, you_are, areas_collaboration)
+            INSERT OR IGNORE INTO professionals (first_name, last_name, contact_number, country_residence, linkedin_url, industry, areas_collaboration)
             VALUES (?, ?, ?, ?, ?, ?, ?);
-        """, (first_name, last_name, contact_number, country_residence, linkedin_url, ', '.join(you_are), areas_collaboration))
+        """, (first_name, last_name, contact_number, country_residence, linkedin_url, ', '.join(industry), areas_collaboration))
         
         conn.commit()
         conn.close()
