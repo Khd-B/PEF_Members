@@ -55,9 +55,7 @@ areas_collaboration = st.text_input("Areas of Potential Collaboration")
 
 
 def enable_submit_button():
-    return (first_name and last_name and country_residence and validate_contact_number(contact_number) 
-            and validate_linkedin_url(linkedin_url) and industry and areas_collaboration)
-
+    return (first_name and last_name and country_residence and contact_number and linkedin_url and industry and areas_collaboration)
 
 if st.button("Submit", enable=enable_submit_button()):
     confirmation = st.confirm_dialog("Confirm", "Are you sure you want to submit?")
