@@ -44,10 +44,21 @@ you_are = st.multiselect(
 )
 areas_collaboration = st.text_input("Areas of Potential Collaboration")
 
+# Function to check if contact number already exists in the database
+def check_contact_number_exists(contact_number):
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    cursor.execute("SELECT COUNT(*) FROM professionals WHERE contact_number = ?", (contact_number,))
+    count = cursor.fetchone()[0]
+    conn.close()
+    return count > 0
+
 # Submit button
 if st.button("Submit"):
     if not first_name or not last_name or country_residence == "Select a country" or not contact_number or not you_are or not areas_collaboration:
         st.error("All fields except LinkedIn URL are required!")
+    elif check_contact_number_exists(contact_number):
+        st.error("This contact number already exists. Please enter a different contact number.")
     else:
         conn = sqlite3.connect(DB_FILE)
         cursor = conn.cursor()
