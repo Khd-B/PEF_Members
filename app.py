@@ -94,14 +94,13 @@ if st.button("View Database"):
 
 
 # Background image
-st.markdown(
-    """
-    <style>
-    .reportview-container {
-        background: url("C:\Users\Abu Ibrahim\Downloads\PEF Logo.jpg") no-repeat center fixed;
-        background-size: cover;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
+st.markdown(r"""
+<style>
+.reportview-container {
+    background: url("YOUR_LOGO_URL") no-repeat center fixed;
+    background-size: cover;
+}
+</style>
+""",
+unsafe_allow_html=True,
 )
