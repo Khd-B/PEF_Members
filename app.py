@@ -151,7 +151,6 @@ if st.button("Search"):
     else:
         st.warning("No matching members found.")
 
-
 # View all database records
 if st.button("View All Members"):
     conn = sqlite3.connect(DB_FILE)
@@ -162,7 +161,7 @@ if st.button("View All Members"):
 
     if results:
         for row in results:
-                        st.write(f"ID: {row[0]}")
+            st.write(f"ID: {row[0]}")
             st.write(f"Name: {row[1]} {row[2]}")
             st.write(f"Contact: {row[3]}")
             st.write(f"Country: {row[4]}")
@@ -171,7 +170,7 @@ if st.button("View All Members"):
             st.write(f"Collaboration: {row[7]}")
             st.markdown("---")
     else:
-        st.info("The database is empty.")
+        st.info("The database is empty")
 
 # Footer
 st.markdown("---")
