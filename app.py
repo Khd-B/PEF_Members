@@ -32,8 +32,11 @@ background_image_url = 'https://raw.githubusercontent.com/Khd-B/PEF_Members/refs
 st.markdown("""
     <style>
     .stApp {
-        background: url('https://raw.githubusercontent.com/Khd-B/PEF_Members/main/PEF_Logo.jpg') no-repeat center center fixed;
-        background-size: cover;
+    background: url('https://raw.githubusercontent.com/Khd-B/PEF_Members/main/PEF_Logo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    z-index: -1; 
+    position: relative; 
+}
     }
     </style>
     """, unsafe_allow_html=True)
