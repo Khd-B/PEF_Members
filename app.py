@@ -16,7 +16,7 @@ cursor.execute("""
         contact_number TEXT,
         country_residence TEXT,
         linkedin_url TEXT,
-        industry TEXT,
+        You_are TEXT,
         areas_collaboration TEXT
     );
 """)
@@ -42,7 +42,7 @@ def validate_linkedin_url(linkedin_url):
     return bool(pattern.match(linkedin_url))
 
 
-st.title("Professional Network App")
+st.title("PEF Family")
 
 
 first_name = st.text_input("First Name")
@@ -50,30 +50,39 @@ last_name = st.text_input("Last Name")
 country_residence = st.selectbox("Country of Residence", [country.name for country in pycountry.countries])
 contact_number = st.text_input("Contact #", value="+" + get_country_code(country_residence))
 linkedin_url = st.text_input("LinkedIn URL")
-industry = st.multiselect("Industry", ["Consultant", "Businessman", "Executive", "Freelancer"])
+you_are = st.multiselect("Industry", ["Consultant", "Businessman", "Executive", "Freelancer"])
 areas_collaboration = st.text_input("Areas of Potential Collaboration")
 
 
 def enable_submit_button():
-    return (first_name and last_name and country_residence and contact_number and linkedin_url and industry and areas_collaboration)
+    return (first_name and last_name and country_residence and contact_number and linkedin_url and you_are and areas_collaboration)
 
-if st.button("Submit", enable=enable_submit_button()):
+
+if st.button("Submit", disabled=not enable_submit_button()):
     confirmation = st.confirm_dialog("Confirm", "Are you sure you want to submit?")
     if confirmation:
         cursor.execute("""
-            INSERT OR IGNORE INTO professionals (first_name, last_name, contact_number, country_residence, linkedin_url, industry, areas_collaboration)
+            INSERT OR IGNORE INTO professionals (first_name, last_name, contact_number, country_residence, linkedin_url, you_are, areas_collaboration)
             VALUES (?, ?, ?, ?, ?, ?, ?);
-        """, (first_name, last_name, contact_number, country_residence, linkedin_url, ', '.join(industry), areas_collaboration))
+        """, (first_name, last_name, contact_number, country_residence, linkedin_url, ', '.join(you_are), areas_collaboration))
         
         conn.commit()
         conn.close()
         
         # Clear input fields
-        st.experimental_show("first_name", value="")
-        st.experimental_show("last_name", value="")
-        st.experimental_show("contact_number", value="")
-        st.experimental_show("linkedin_url", value="")
-        st.experimental_show("areas_collaboration", value="")
+        first_name = ""
+        last_name = ""
+        contact_number = ""
+        linkedin_url = ""
+        areas_collaboration = ""
+
+
+if st.button("Reset"):
+    first_name = ""
+    last_name = ""
+    contact_number = ""
+    linkedin_url = ""
+    areas_collaboration = ""
 
 
 search_term = st.text_input("Search for members")
