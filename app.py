@@ -1,6 +1,5 @@
 import streamlit as st
 import sqlite3
-import os
 import pycountry
 
 # Database connection setup
@@ -31,56 +30,47 @@ create_database()
 st.title("Professional Network App")
 
 # Input form
-with st.form("registration_form"):
-    first_name = st.text_input("First Name")
-    last_name = st.text_input("Last Name")
-    country_residence = st.selectbox(
-        "Country of Residence",
-        ["Select a country"] + [country.name for country in pycountry.countries]
-    )
-    contact_number = st.text_input("Contact #")
-    linkedin_url = st.text_input("LinkedIn URL (Optional)")
-    you_are = st.multiselect(
-        "You are",
-        ["Consultant", "Entrepreneur", "Executive", "Freelancer"]
-    )
-    areas_collaboration = st.text_input("Areas of Potential Collaboration")
-    submit_button = st.form_submit_button("Submit")
+first_name = st.text_input("First Name")
+last_name = st.text_input("Last Name")
+country_residence = st.selectbox(
+    "Country of Residence",
+    ["Select a country"] + [country.name for country in pycountry.countries]
+)
+contact_number = st.text_input("Contact #")
+linkedin_url = st.text_input("LinkedIn URL (Optional)")
+you_are = st.multiselect(
+    "You are",
+    ["Consultant", "Entrepreneur", "Executive", "Freelancer"]
+)
+areas_collaboration = st.text_input("Areas of Potential Collaboration")
 
-if submit_button:
+# Submit button
+if st.button("Submit"):
     if not first_name or not last_name or country_residence == "Select a country" or not contact_number or not you_are or not areas_collaboration:
         st.error("All fields except LinkedIn URL are required!")
     else:
         conn = sqlite3.connect(DB_FILE)
         cursor = conn.cursor()
-        
-        # Check for duplicate entries
+
+        # Insert the new entry
         cursor.execute("""
-            SELECT COUNT(*) FROM professionals
-            WHERE first_name = ? AND last_name = ? AND contact_number = ? AND country_residence = ?;
-        """, (first_name, last_name, contact_number, country_residence))
-        if cursor.fetchone()[0] > 0:
-            st.warning("This entry already exists in the database.")
-        else:
-            # Insert the new entry
-            cursor.execute("""
-                INSERT INTO professionals (first_name, last_name, contact_number, country_residence, linkedin_url, you_are, areas_collaboration)
-                VALUES (?, ?, ?, ?, ?, ?, ?);
-            """, (
-                first_name,
-                last_name,
-                contact_number,
-                country_residence,
-                linkedin_url,
-                ', '.join(you_are),
-                areas_collaboration
-            ))
-            conn.commit()
-            st.success("Your data has been added successfully!")
-        
+            INSERT INTO professionals (first_name, last_name, contact_number, country_residence, linkedin_url, you_are, areas_collaboration)
+            VALUES (?, ?, ?, ?, ?, ?, ?);
+        """, (
+            first_name,
+            last_name,
+            contact_number,
+            country_residence,
+            linkedin_url,
+            ', '.join(you_are),
+            areas_collaboration
+        ))
+        conn.commit()
         conn.close()
 
-        # Clear input fields
+        st.success("Your data has been added successfully!")
+
+        # Reset input fields after successful submission
         st.experimental_rerun()
 
 # Search functionality
