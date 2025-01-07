@@ -46,11 +46,19 @@ st.markdown(f"""
 # Container for UI elements
 container = st.container()
 with container:
-    # Input form
-    st.title("Professional Network App")
-    
-    # Input form
-st.title("Professional Network App")
+   st.title("Professional Network App")
+
+first_name = st.text_input("First Name", key="first_name")
+last_name = st.text_input("Last Name", key="last_name")
+
+country_residence = st.selectbox("Country of Residence", ["Select a country"] + [country.name for country in pycountry.countries], key="country")
+
+contact_number = st.text_input("Contact Number", key="contact_number")
+linkedin_url = st.text_input("LinkedIn URL (Optional)", key="linkedin_url")
+
+you_are = st.multiselect("You are", ["Consultant", "Entrepreneur", "Executive", "Freelancer"], key="you_are")
+
+areas_collaboration = st.text_input("Areas of Potential Collaboration", key="collaboration")
 
 # User input titles with custom styling
 first_name_title = st.markdown("<p class='title'>First Name</p>", unsafe_allow_html=True)
