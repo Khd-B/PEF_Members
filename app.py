@@ -29,17 +29,15 @@ create_database()
 # Set background with an image from GitHub
 background_image_url = 'https://raw.githubusercontent.com/Khd-B/PEF_Members/refs/heads/main/PEF%20Logo.jpg'
 
-st.markdown("""
+# App title and background
+st.markdown(f"""
     <style>
-    .stApp {
-    background: url('https://raw.githubusercontent.com/Khd-B/PEF_Members/main/PEF_Logo.jpg') no-repeat center center fixed;
-    background-size: cover;
-    z-index: -1; 
-    position: relative; 
-}
-    }
+    .stApp {{
+        background: url('{background_image_url}') no-repeat center center fixed;
+        background-size: cover;
+    }}
     </style>
-    """, unsafe_allow_html=True)
+""", unsafe_allow_html=True)
 
 # Container for UI elements
 container = st.container()
