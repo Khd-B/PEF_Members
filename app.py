@@ -81,8 +81,16 @@ if st.button("Submit"):
 
         st.success("Your data has been added successfully!")
 
-        # Reset input fields after successful submission
-        st.experimental_rerun()
+        # Reset the fields
+        first_name = ""
+        last_name = ""
+        contact_number = ""
+        linkedin_url = ""
+        areas_collaboration = ""
+        you_are = []
+        
+        # Show confirmation message
+        st.info("Fields have been reset.")
 
 # Search functionality
 st.header("Search Members")
