@@ -59,7 +59,7 @@ def enable_submit_button():
             and validate_linkedin_url(linkedin_url) and industry and areas_collaboration)
 
 
-if st.button("Submit", disabled=not enable_submit_button()):
+if st.button("Submit", enable=enable_submit_button()):
     confirmation = st.confirm_dialog("Confirm", "Are you sure you want to submit?")
     if confirmation:
         cursor.execute("""
