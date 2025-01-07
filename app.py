@@ -29,18 +29,21 @@ create_database()
 # Set background with an image from GitHub
 background_image_url = 'https://raw.githubusercontent.com/Khd-B/PEF_Members/refs/heads/main/PEF%20Logo.jpg'
 
-st.markdown(
-    f"""
-    <style>
-        .reportview-container {{
-            background: url('{background_image_url}') no-repeat center center fixed;
-            background-size: cover;
-            height: 100vh;
-        }}
-    </style>
-    """, 
-    unsafe_allow_html=True
-)
+st.markdown("""
+<style>
+.bg-container {
+    background-image: url('https://raw.githubusercontent.com/Khd-B/PEF_Members/refs/heads/main/PEF%20Logo.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    position: relative;
+    width: 100%;
+}
+</style>
+<div class="bg-container"></div>
+""", unsafe_allow_html=True)
+
 
 # App title
 st.title("Professional Network App")
