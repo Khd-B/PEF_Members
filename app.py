@@ -9,17 +9,9 @@ cursor = conn.cursor()
 
 # Create table
 cursor.execute("""
-    CREATE TABLE IF NOT EXISTS professionals (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        first_name TEXT,
-        last_name TEXT,
-        contact_number TEXT,
-        country_residence TEXT,
-        linkedin_url TEXT,
-        profession TEXT,
-        areas_collaboration TEXT
-    );
-""")
+    INSERT OR IGNORE INTO professionals (first_name, last_name, contact_number, country_residence, linkedin_url, industry, areas_collaboration)
+    VALUES (?, ?, ?, ?, ?, ?, ?);
+""", (first_name, last_name, contact_number, country_residence, linkedin_url, ', '.join(professions), areas_collaboration))
 
 conn.commit()
 
